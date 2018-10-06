@@ -4,6 +4,7 @@ import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -23,6 +24,11 @@ public class Stream {
     @NonNull
     public final String viewers;
 
+    @SerializedName("preview")
+    @Embedded(prefix = "preview_")
+    @NonNull
+    public final Preview preview;
+
     @SerializedName("channel")
     @Embedded(prefix = "channel_")
     @NonNull
@@ -30,10 +36,11 @@ public class Stream {
 
     private Date lastRefresh;
 
-    public Stream(int id, @NonNull String game, @NonNull String viewers, @NonNull Channel channel, Date lastRefresh) {
+    public Stream(int id, @NonNull String game, @NonNull String viewers, @NonNull Preview preview, @NonNull Channel channel, Date lastRefresh) {
         this.id = id;
         this.game = game;
         this.viewers = viewers;
+        this.preview = preview;
         this.channel = channel;
         this.lastRefresh = lastRefresh;
     }
@@ -53,6 +60,11 @@ public class Stream {
     }
 
     @NonNull
+    public Preview getPreview() {
+        return preview;
+    }
+
+    @NonNull
     public Channel getChannel() {
         return channel;
     }
@@ -63,6 +75,23 @@ public class Stream {
 
     public void setLastRefresh(Date lastRefresh) {
         this.lastRefresh = lastRefresh;
+    }
+
+    public static class Preview{
+
+        @SerializedName("medium")
+        @NonNull
+        public final String preview;
+
+        public Preview(@NonNull String preview) {
+
+            this.preview = preview;
+        }
+
+        @NonNull
+        public String getPreview() {
+            return preview;
+        }
     }
 
     public static class Channel{
