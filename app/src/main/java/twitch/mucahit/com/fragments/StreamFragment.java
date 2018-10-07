@@ -4,6 +4,7 @@ package twitch.mucahit.com.fragments;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +15,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 
 import java.util.List;
 
@@ -82,8 +85,18 @@ public class StreamFragment extends Fragment {
         viewModel.getStream().observe(this, new Observer<List<Stream>>() {
             @Override
             public void onChanged(@Nullable List<Stream> streams) {
+                runLayoutAnimation(recyclerView);
                 adapter.setStreams(streams);
             }
         });
+    }
+
+    private void runLayoutAnimation(final RecyclerView recyclerView) {
+        final Context context = recyclerView.getContext();
+        final LayoutAnimationController controller =
+                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_fall_down);
+
+        recyclerView.setLayoutAnimation(controller);
+        recyclerView.scheduleLayoutAnimation();
     }
 }

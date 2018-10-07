@@ -42,7 +42,7 @@ public class StreamRepository {
     private final StreamDao streamDao;
     private final Executor executor;
     private CompositeDisposable disposable = new CompositeDisposable();
-    StreamResponse response;
+    private StreamResponse response;
 
     @Inject
     public StreamRepository(StreamService streamService, StreamDao streamDao, Executor executor) {
@@ -61,10 +61,15 @@ public class StreamRepository {
 
         Toast.makeText(App.context, "Data refreshed from network", Toast.LENGTH_SHORT).show();
 
-        Observable.interval(0,3, TimeUnit.MINUTES, Schedulers.io())
+        Observable.interval(0,1, TimeUnit.MINUTES, Schedulers.io())
                 .flatMap(new Function<Long,  Observable<Response>>() {
                     @Override
                     public Observable<Response> apply(Long aLong) throws Exception {
+
+                        executor.execute(()->{
+                            streamDao.clear();
+                        });
+
                         disposable.add(streamService.getStreams("87wjif2ck3gw4cf5gss3qcb1erant6")
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
@@ -83,7 +88,6 @@ public class StreamRepository {
                                     public void onComplete() {
                                         if (response != null){
                                             executor.execute(()->{
-                                                streamDao.clear();
                                                 streamDao.save(response.getStreams());
                                             });
                                         }
@@ -93,57 +97,5 @@ public class StreamRepository {
                     }
                 })
                 .subscribe();
-
-//        disposable.add(streamService.getStreams("87wjif2ck3gw4cf5gss3qcb1erant6")
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeWith(new DisposableObserver<StreamResponse>() {
-//                    @Override
-//                    public void onNext(StreamResponse streamResponse) {
-//                        response = streamResponse;
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//                        if (response != null){
-//                            executor.execute(()->{
-//                                streamDao.save(response.getStreams());
-//                            });
-//                        }
-//                    }
-//                }));
-
-
-
-//        executor.execute(() -> {
-//
-//            streamService.getStreams("87wjif2ck3gw4cf5gss3qcb1erant6").enqueue(new Callback<StreamResponse>() {
-//                @Override
-//                public void onResponse(Call<StreamResponse> call, Response<StreamResponse> response) {
-//                    Toast.makeText(App.context, "Data refreshed from network", Toast.LENGTH_SHORT).show();
-//                    executor.execute(() -> {
-//
-////                            Log.d("deneme", response.body().getStreams().get(0).getGame());
-////                            List<Integer> streamIds = response.body().getStreamIds();
-////
-////                            StreamResult streamResult = new StreamResult(streamIds);
-////                            streamDao.save(streamResult);
-//
-//                        StreamResponse streamResponse = response.body();
-//                        streamDao.save(streamResponse.getStreams());
-//                    });
-//                }
-//
-//                @Override
-//                public void onFailure(Call<StreamResponse> call, Throwable t) {
-//                    Log.d("deneme", t.getLocalizedMessage());
-//                }
-//            });
-//        });
     }
 }
