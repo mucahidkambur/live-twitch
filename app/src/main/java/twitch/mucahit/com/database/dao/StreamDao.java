@@ -3,6 +3,7 @@ package twitch.mucahit.com.database.dao;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
@@ -24,4 +25,8 @@ public interface StreamDao {
 
     @Query("SELECT * FROM stream WHERE lastRefresh > :lastRefreshMax LIMIT 1")
     Stream hasStream(Date lastRefreshMax);
+
+    @Query("DELETE FROM stream")
+    void clear();
+
 }
