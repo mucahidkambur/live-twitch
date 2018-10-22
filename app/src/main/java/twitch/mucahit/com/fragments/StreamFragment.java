@@ -37,6 +37,7 @@ import twitch.mucahit.com.view_models.StreamViewModel;
 public class StreamFragment extends Fragment {
 
     public static final String UID_KEY = "uid";
+
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     private StreamViewModel viewModel;

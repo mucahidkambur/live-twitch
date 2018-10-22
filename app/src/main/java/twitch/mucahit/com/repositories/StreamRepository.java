@@ -1,13 +1,7 @@
 package twitch.mucahit.com.repositories;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.persistence.room.Insert;
-import android.util.Log;
-import android.widget.Toast;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
@@ -15,25 +9,18 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import io.reactivex.Completable;
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
-import twitch.mucahit.com.App;
+import twitch.mucahit.com.BuildConfig;
 import twitch.mucahit.com.api.StreamService;
 import twitch.mucahit.com.database.dao.StreamDao;
 import twitch.mucahit.com.database.entity.Stream;
 import twitch.mucahit.com.database.entity.StreamResponse;
-import twitch.mucahit.com.database.entity.StreamResult;
 
 @Singleton
 public class StreamRepository {
@@ -59,18 +46,14 @@ public class StreamRepository {
 
     private void refreshStream(){
 
-        Toast.makeText(App.context, "Data refreshed from network", Toast.LENGTH_SHORT).show();
-
         Observable.interval(0,1, TimeUnit.MINUTES, Schedulers.io())
                 .flatMap(new Function<Long,  Observable<Response>>() {
                     @Override
                     public Observable<Response> apply(Long aLong) throws Exception {
 
-                        executor.execute(()->{
-                            streamDao.clear();
-                        });
+                        executor.execute(streamDao::clear);
 
-                        disposable.add(streamService.getStreams("87wjif2ck3gw4cf5gss3qcb1erant6")
+                        disposable.add(streamService.getStreams(BuildConfig.CLIENT_ID, BuildConfig.OAUTH_TOKEN)
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribeWith(new DisposableObserver<StreamResponse>() {

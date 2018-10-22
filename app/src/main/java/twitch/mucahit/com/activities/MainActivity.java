@@ -10,6 +10,7 @@ import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
+import twitch.mucahit.com.BuildConfig;
 import twitch.mucahit.com.R;
 import twitch.mucahit.com.fragments.StreamFragment;
 
@@ -17,8 +18,6 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
-
-    private static String CLIENT_ID = "87wjif2ck3gw4cf5gss3qcb1erant6";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +37,6 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         if (savedInstanceState == null){
 
             StreamFragment fragment = new StreamFragment();
-
-            Bundle bundle = new Bundle();
-            bundle.putString(StreamFragment.UID_KEY, CLIENT_ID);
-            fragment.setArguments(bundle);
 
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_container, fragment, null)

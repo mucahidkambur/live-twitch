@@ -8,6 +8,6 @@ import twitch.mucahit.com.database.entity.StreamResponse;
 
 public interface StreamService {
 
-    @GET("kraken/streams/followed?oauth_token=0koaiuaigrp8dwisvb93fplk4mwzze")
-    Observable<StreamResponse> getStreams(@Query("client_id") String clientId);
+    @GET("kraken/streams/followed")
+    Observable<StreamResponse> getStreams(@Query("client_id") String clientId, @Query("oauth_token") String token);
 }
