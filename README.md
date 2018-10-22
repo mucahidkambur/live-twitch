@@ -1,9 +1,17 @@
 # live-twitch
 Twitch.TV API kullanılarak favori listesindeki online yayıncıları gösteren Android uygulaması
 
-# Önizleme
+### Kullanılan Kütüphane/Tasarım Deseni
 
-# Ayarlar
+- MVVM
+- RxJava
+- Dagger 2
+- Retrofit
+- Glide
+
+## Önizleme
+
+## Ayarlar
 
 1. https://glass.twitch.tv/console/apps adresinden uygulamanızı kayıt et'e tıklayın
   - Name kısmına uygulamanızın ismini yazın
