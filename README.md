@@ -10,6 +10,7 @@ Twitch.TV API kullanılarak favori listesindeki online yayıncıları gösteren 
 - Glide
 
 ## Önizleme
+![alt text](https://raw.githubusercontent.com/mucahitkambur/live-twitch/master/resimler/example.gif)
 
 ## Ayarlar
 
